@@ -8,47 +8,21 @@ Standard AI search engines summarize page-one sponsored affiliate blogs that bur
 
 ## 🔄 LangGraph Cyclical Architecture
 
-Here is the multi-agent execution pipeline powered by LangGraph's cyclical `StateGraph`:
+<p align="center">
+  <img src="architecture_graph.png" alt="TrueVerdict LangGraph Architecture" width="700"/>
+</p>
 
+### Interactive Workflow Diagram
 ```mermaid
----
-config:
-  flowchart:
-    curve: basis
----
-flowchart TD
-    Start(["🚀 User Prompt Input"]) --> Planner["🧠 planner_node<br/><b>Constraint Extraction</b><br/>• Max Price & Must-Haves<br/>• Pain Points to Avoid<br/>• Dual Query Generation"]
-    
-    Planner --> Harvester["🌐 harvester_node<br/><b>Parallel Data Harvesting</b><br/>• Query A: Tech Specs & Wirecutter/RTINGS<br/>• Query B: Real Owner Reddit Complaints"]
-    
-    Harvester --> Auditor["⚖️ auditor_node<br/><b>Adversarial Auditor</b><br/>• Cross-examines Claims vs Complaints<br/>• Computes Confidence Score (0-100)<br/>• Detects Unverified Hype & Flaws"]
-    
-    Auditor --> ShouldLoop{"🔍 should_loop<br/><i>Contradiction Found?<br/>loop_count < 1</i>"}
-    
-    ShouldLoop -- "Yes (Contradiction Found)" --> TieBreaker["🔄 tie_breaker_node<br/><b>Targeted Dispute Resolver</b><br/>• Runs followup_query on Reddit/forums<br/>• Increments loop_count"]
-    
+graph TD
+    Start([🚀 User Prompt Input]) --> Planner[🧠 planner_node: Constraint Extraction]
+    Planner --> Harvester[🌐 harvester_node: Parallel Search Specs vs Reddit]
+    Harvester --> Auditor[⚖️ auditor_node: Adversarial Auditor]
+    Auditor -->|Contradiction Found| TieBreaker[🔄 tie_breaker_node: Dispute Resolver]
     TieBreaker --> Auditor
-    
-    ShouldLoop -- "No (Resolved / Compliant)" --> Synthesizer["📊 synthesizer_node<br/><b>Anti-SEO Verdict Synthesis</b><br/>• Verdict: BUY / AVOID / CONDITIONAL<br/>• Resolved Contradictions Table<br/>• Hidden Dealbreakers & Alternatives"]
-    
-    Synthesizer --> End(["✅ Final Anti-SEO Report"])
-
-    classDef default fill:#0f172a,stroke:#334155,stroke-width:1px,color:#f8fafc;
-    classDef startEnd fill:#064e3b,stroke:#059669,stroke-width:2px,color:#6ee7b7;
-    classDef loopNode fill:#451a03,stroke:#d97706,stroke-width:2px,color:#fcd34d;
-    classDef condition fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#c7d2fe;
-
-    class Start,End startEnd;
-    class TieBreaker loopNode;
-    class ShouldLoop condition;
+    Auditor -->|No Contradiction / Resolved| Synthesizer[📊 synthesizer_node: Anti-SEO Final Verdict]
+    Synthesizer --> End([✅ Final Anti-SEO Report])
 ```
-
----
-
-### Exported Graph Image
-You can also view the direct compiled graph artifact generated from LangGraph:
-
-![TrueVerdict LangGraph Architecture](architecture_graph.png)
 
 ---
 
